@@ -166,7 +166,30 @@ public struct Xoshiro {
         }
     }
     
-    
+    public struct Xoroshiro128PlusPlus: Randomizable & Jumpable {
+        public typealias State = (UInt64, UInt64)
+        public private(set) var state: State = (0, 0)
+        
+        public mutating func next() -> UInt64 {
+            let lhs = state.0
+            var rhs = state.1
+            let result = rotl(for: lhs &+ rhs, by: 17) &+ lhs
+            rhs ^= lhs
+            state = (
+                rotl(for: lhs, by: 49) ^ rhs ^ (rhs << 21),
+                rotl(for: rhs, by: 28)
+            )
+            return result
+        }
+        
+        public mutating func jump() {
+            <#code#>
+        }
+        
+        public mutating func longJump() {
+            <#code#>
+        }
+    }
     
     enum PRNG {
         case xoroshiro2x32Star
